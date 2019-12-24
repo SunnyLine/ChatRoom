@@ -1,2 +1,2 @@
-include ':app', ':server'
+include ':app', ':server', ':old_server'
 rootProject.name='ChatRoom'
