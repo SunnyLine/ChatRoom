@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.pullein.chatroom.bean.ChatBean;
+import com.pullein.chatroom.utils.ThreadUtils;
 import com.pullein.chatroom.view.ChatView;
 
 import java.io.BufferedReader;
@@ -55,13 +56,18 @@ public class SocketThread extends Thread {
         }
     }
 
-    public void sendMsg(String msg) {
-        ChatBean bean = new ChatBean(msg, chatView.getUserId());
-        if (!TextUtils.isEmpty(msg) && socket != null && socket.isConnected()) {
-            if (!socket.isOutputShutdown()) {
-                out.println(new Gson().toJson(bean));
+    public void sendMsg(final String msg) {
+        final ChatBean bean = new ChatBean(msg, chatView.getUserId());
+        ThreadUtils.runOnBackgroundThread(new Runnable() {
+            @Override
+            public void run() {
+                if (!TextUtils.isEmpty(msg) && socket != null && socket.isConnected()) {
+                    if (!socket.isOutputShutdown()) {
+                        out.println(new Gson().toJson(bean));
+                    }
+                }
             }
-        }
+        });
     }
 
     //接收线程发送过来信息，并用TextView显示

@@ -29,7 +29,7 @@ public class Main {
     	try {
             server = new ServerSocket(PORT);
             mExecutorService = Executors.newCachedThreadPool();  //create a thread pool
-            System.out.println("服务器已启动...");
+            System.out.println("server is running...");
             Socket client = null;
             while(true) {
                 client = server.accept();
